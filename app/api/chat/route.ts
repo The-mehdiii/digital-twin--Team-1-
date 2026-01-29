@@ -1,33 +1,41 @@
 /**
- * Chat API Route (Stub for Week 2)
- * Full implementation in Week 3-4 with MCP tools and persistence
+ * Chat API Route - Week 3 Implementation
+ * Streams AI responses using Vercel AI SDK + Groq LLM
+ * System prompt from lib/system-prompt.ts
  */
 
-import { NextRequest, NextResponse } from "next/server";
+import { streamText } from "ai";
+import { groq } from "@ai-sdk/groq";
 
-export async function POST(request: NextRequest) {
+export const runtime = "nodejs";
+
+export async function POST(request: Request) {
   try {
-    const body = await request.json();
-    const { message } = body;
+    const { messages, system } = await request.json();
 
-    if (!message) {
-      return NextResponse.json(
-        { error: "Message is required" },
-        { status: 400 }
-      );
+    if (!messages || !Array.isArray(messages)) {
+      return new Response("Invalid messages format", { status: 400 });
     }
 
-    // Placeholder response for Week 2
-    // Real MCP integration happens in Week 3
-    return NextResponse.json({
-      reply: "Chat API is ready. Week 3 implementation coming soon.",
-      timestamp: new Date().toISOString(),
+    if (!process.env.GROQ_API_KEY) {
+      console.error("GROQ_API_KEY not set");
+      return new Response("LLM API key not configured", { status: 500 });
+    }
+
+    const result = streamText({
+      model: groq("llama-3.1-70b-versatile"), // Using Groq's free model
+      system: system || "You are a helpful assistant.",
+      messages: messages.map((msg: any) => ({
+        role: msg.role,
+        content: msg.content,
+      })),
+      temperature: 0.7,
+      maxTokens: 1024,
     });
+
+    return result.toDataStreamResponse();
   } catch (error) {
     console.error("Chat API error:", error);
-    return NextResponse.json(
-      { error: "Internal server error" },
-      { status: 500 }
-    );
+    return new Response("Internal server error", { status: 500 });
   }
 }
