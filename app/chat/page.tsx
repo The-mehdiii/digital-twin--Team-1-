@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useRef } from "react";
+import { Sidebar } from "@/components/Sidebar";
 import { ChatMessages } from "@/components/ChatMessages";
 import { ChatInput } from "@/components/ChatInput";
 import { SYSTEM_PROMPT } from "@/lib/system-prompt";
@@ -11,15 +12,39 @@ interface Message {
   content: string;
 }
 
+interface Conversation {
+  id: string;
+  title: string;
+  timestamp: string;
+}
+
 export default function ChatPage() {
   const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const [conversations, setConversations] = useState<Conversation[]>([]);
+  const [activeConversationId, setActiveConversationId] = useState<string>();
   const messageIdRef = useRef(0);
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (!input.trim() || isLoading) return;
+
+    // Create new conversation on first message
+    if (messages.length === 0) {
+      const conversationTitle = input.substring(0, 30);
+      const newConvId = Date.now().toString();
+      const newConversation: Conversation = {
+        id: newConvId,
+        title: conversationTitle,
+        timestamp: new Date().toLocaleTimeString([], {
+          hour: "2-digit",
+          minute: "2-digit",
+        }),
+      };
+      setConversations((prev) => [newConversation, ...prev]);
+      setActiveConversationId(newConvId);
+    }
 
     // Add user message
     const userMessage: Message = {
@@ -63,30 +88,43 @@ export default function ChatPage() {
     }
   };
 
+  const handleNewChat = () => {
+    setMessages([]);
+    setInput("");
+    setActiveConversationId(undefined);
+  };
+
   return (
-    <div className="flex flex-col h-screen bg-white">
-      {/* Header */}
-      <div className="border-b border-gray-200 p-4">
-        <h1 className="text-2xl font-bold text-gray-900">
-          Mehdi's Digital Twin
-        </h1>
-        <p className="text-sm text-gray-600">
-          Ask me anything about web development, projects, or collaborations
-        </p>
-      </div>
+    <div style={{ display: "flex", width: "100%", height: "100vh" }}>
+      <Sidebar
+        conversations={conversations}
+        activeConversationId={activeConversationId}
+        onNewChat={handleNewChat}
+        onSelectConversation={(id) => {
+          setActiveConversationId(id);
+          // TODO: Load conversation messages from database
+        }}
+      />
+      <main>
+        {/* Header */}
+        <header>
+          <h1>Mehdi's Digital Twin</h1>
+          <p>Ask me anything about web development, projects, or collaborations</p>
+        </header>
 
-      {/* Messages */}
-      <ChatMessages messages={messages} isLoading={isLoading} />
+        {/* Messages */}
+        <ChatMessages messages={messages} isLoading={isLoading} />
 
-      {/* Input */}
-      <div className="border-t border-gray-200 p-4">
-        <ChatInput
-          input={input}
-          setInput={setInput}
-          handleSubmit={handleSubmit}
-          isLoading={isLoading}
-        />
-      </div>
+        {/* Input */}
+        <div style={{ borderTop: "1px solid #e5e7eb", padding: "20px 24px" }}>
+          <ChatInput
+            input={input}
+            setInput={setInput}
+            handleSubmit={handleSubmit}
+            isLoading={isLoading}
+          />
+        </div>
+      </main>
     </div>
   );
 }
