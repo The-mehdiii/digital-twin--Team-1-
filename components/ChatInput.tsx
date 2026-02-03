@@ -1,6 +1,8 @@
 "use client";
 
 import { FormEvent, useRef, useEffect } from "react";
+import { Button } from "@/components/ui/button";
+import { Send } from "lucide-react";
 
 export interface ChatInputProps {
   input: string;
@@ -35,7 +37,7 @@ export function ChatInput({
   };
 
   return (
-    <form onSubmit={handleSubmit} className="chat-form">
+    <form onSubmit={handleSubmit} className="flex gap-3 p-4 border-t border-cyan-900/30 bg-gray-900/50">
       <input
         ref={inputRef}
         type="text"
@@ -44,13 +46,24 @@ export function ChatInput({
         onChange={(e) => setInput(e.target.value)}
         onKeyDown={handleKeyDown}
         disabled={isLoading}
+        className="flex-1 px-4 py-3 bg-gray-800/50 border border-cyan-800/30 rounded-xl text-cyan-50 placeholder:text-cyan-700 focus:outline-none focus:ring-2 focus:ring-cyan-500/50 focus:border-cyan-500 transition-all disabled:opacity-50"
+        suppressHydrationWarning
       />
-      <button
+      <Button
         type="submit"
         disabled={isLoading || !input.trim()}
+        variant="cyan"
+        size="lg"
+        className="px-6"
       >
-        {isLoading ? "..." : "Send"}
-      </button>
+        {isLoading ? (
+          <span className="flex items-center gap-2">
+            <span className="w-4 h-4 border-2 border-gray-900/30 border-t-gray-900 rounded-full animate-spin" />
+          </span>
+        ) : (
+          <Send className="w-5 h-5" />
+        )}
+      </Button>
     </form>
   );
 }

@@ -38,24 +38,45 @@ export function ChatMessages({ messages, isLoading }: ChatMessagesProps) {
           }}
         >
           <div>
-            <h2
+            <div
               style={{
-                fontSize: "24px",
-                fontWeight: "700",
-                marginBottom: "12px",
-                color: "#111827",
+                width: "80px",
+                height: "80px",
+                background: "linear-gradient(135deg, #0891b2 0%, #14b8a6 100%)",
+                borderRadius: "20px",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                margin: "0 auto 24px",
+                boxShadow: "0 8px 24px rgba(6, 182, 212, 0.5)",
               }}
             >
-              Digital Twin Chat
+              <span style={{ fontSize: "32px", color: "#0a0d10" }}>✨</span>
+            </div>
+            <h2
+              style={{
+                fontSize: "28px",
+                fontWeight: "700",
+                marginBottom: "12px",
+                background: "linear-gradient(135deg, #06b6d4 0%, #14b8a6 100%)",
+                WebkitBackgroundClip: "text",
+                WebkitTextFillColor: "transparent",
+                backgroundClip: "text",
+                letterSpacing: "-0.02em",
+              }}
+            >
+              Welcome to Digital Twin
             </h2>
             <p
               style={{
-                fontSize: "14px",
-                color: "#6b7280",
-                margin: 0,
+                fontSize: "15px",
+                color: "#a5f3fc",
+                margin: "0 auto",
+                maxWidth: "360px",
+                lineHeight: "1.6",
               }}
             >
-              Ask me anything about Mehdi's experience, projects, or skills!
+              Ask me anything about Mehdi's experience, projects, or skills. I'm here to help!
             </p>
           </div>
         </div>

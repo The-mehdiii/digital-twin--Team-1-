@@ -1,0 +1,62 @@
+
+@import "tailwindcss";
+
+:root {
+  --bg: #0a0d10;
+  --surface: #0f1419;
+  --muted: #67e8f9;
+  --primary-start: #06b6d4;
+  --primary-end: #22d3ee;
+  --accent-start: #f59e0b;
+  --accent-end: #f97316;
+}
+
+* { box-sizing: border-box; }
+html, body, #__next { height: 100%; }
+body {
+  margin: 0;
+  font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+  background: var(--bg);
+  color: #ecfeff;
+}
+
+/* Basic layout */
+#__next { display: flex; }
+main { flex: 1; min-height: 100vh; background: linear-gradient(180deg, var(--bg), var(--surface)); }
+
+.container { max-width: 1100px; margin: 0 auto; padding: 24px; }
+
+/* Header */
+header { padding: 20px 24px; }
+header h1 { margin: 0; font-size: 26px; background: linear-gradient(135deg,var(--primary-start),var(--primary-end)); -webkit-background-clip: text; color: transparent; }
+header p { margin: 6px 0 0; color: var(--muted); }
+
+/* Sidebar */
+.sidebar { width: 280px; background: linear-gradient(180deg,#080b0e,#0d1318); min-height: 100vh; }
+.sidebar .logo { padding: 16px; display:flex; align-items:center; gap:12px; }
+
+/* Conversations */
+.conversations-section { padding: 12px; }
+.conversation-item { display:flex; gap:10px; align-items:center; padding:10px; border-radius:8px; color: rgba(255,255,255,0.9); }
+.conversation-item:hover { background: rgba(255,255,255,0.03); }
+
+/* Footer buttons */
+.sidebar-footer { padding: 12px; display:flex; flex-direction:column; gap:8px; }
+.footer-btn { display:flex; align-items:center; gap:10px; padding:10px; border-radius:8px; background: transparent; color: rgba(255,255,255,0.85); border: none; cursor: pointer; }
+
+/* Chat */
+.chat-messages { padding: 24px; display:flex; flex-direction:column; gap:18px; }
+.message-bubble { padding:12px 16px; border-radius:12px; max-width: 75%; }
+.message.user .message-bubble { background: linear-gradient(135deg,var(--primary-start),var(--primary-end)); color: #071016; }
+.message.assistant .message-bubble { background: #0f1419; border: 1px solid rgba(255,255,255,0.03); color: #cfeefb; }
+
+/* Utilities */
+.text-muted { color: var(--muted); }
+
+/* Responsive */
+@media (max-width: 768px) {
+  .sidebar { display: none; }
+  header h1 { font-size: 20px; }
+}
+
+

@@ -1,0 +1,3 @@
+﻿This is a test document for RAG system testing.
+It contains sample content that will be parsed and indexed.
+The parser should extract this text successfully.
