@@ -37,8 +37,12 @@ header p { margin: 6px 0 0; color: var(--muted); }
 
 /* Conversations */
 .conversations-section { padding: 12px; }
-.conversation-item { display:flex; gap:10px; align-items:center; padding:10px; border-radius:8px; color: rgba(255,255,255,0.9); }
+.conversation-item { display:flex; gap:10px; align-items:center; padding:10px; border-radius:8px; color: rgba(255,255,255,0.9); width:100%; overflow:hidden; text-align:left; cursor:pointer; background:transparent; border:none; }
 .conversation-item:hover { background: rgba(255,255,255,0.03); }
+.conversation-item.active { background: rgba(6,182,212,0.08); border-left: 2px solid rgba(6,182,212,0.6); }
+.conv-info { flex:1; min-width:0; display:flex; flex-direction:column; align-items:flex-start; }
+.conv-title { font-size:13px; color:rgba(255,255,255,0.9); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; width:100%; }
+.conv-time { font-size:11px; color:#64748b; margin-top:1px; white-space:nowrap; }
 
 /* Footer buttons */
 .sidebar-footer { padding: 12px; display:flex; flex-direction:column; gap:8px; }

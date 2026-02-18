@@ -101,30 +101,27 @@ export function Sidebar({
       </div>
 
       {/* Conversations */}
-      <div className="flex-1 overflow-auto px-2 mt-3">
-        {isExpanded && <h3 className="px-4 text-xs text-slate-300 uppercase tracking-wider">Recent Conversations</h3>}
-        <div className="conversations-list mt-2">
+      <div className="flex-1 overflow-y-auto overflow-x-hidden px-2 mt-3">
+        {isExpanded && <h3 className="px-2 pb-1 text-xs text-slate-500 uppercase tracking-wider">Recent Conversations</h3>}
+        <div className="flex flex-col gap-0.5 mt-1">
           {conversations.length === 0 ? (
             isExpanded && (
-              <p className="px-4 text-sm text-slate-400">No conversations yet<br/>Start a new chat above!</p>
+              <p className="px-3 text-sm text-slate-500">No conversations yet.<br/>Start a new chat above!</p>
             )
           ) : (
             conversations.map((conv) => (
               <button
                 key={conv.id}
-                className={`conversation-item ${
-                  activeConversationId === conv.id ? "active" : ""
-                }`}
+                className={`conversation-item ${activeConversationId === conv.id ? "active" : ""}`}
                 onClick={() => onSelectConversation(conv.id)}
                 title={conv.title}
-                style={{ display: 'flex', alignItems: 'center', gap: 10 }}
                 suppressHydrationWarning
               >
-                <MessageSquare size={16} style={{ flexShrink: 0, opacity: 0.85 }} />
+                <MessageSquare size={15} style={{ flexShrink: 0, opacity: 0.5 }} />
                 {isExpanded && (
-                  <div className="conv-info flex flex-col items-start truncate">
-                    <p className="conv-title text-sm truncate">{conv.title}</p>
-                    <p className="conv-time text-xs text-slate-400">{conv.timestamp}</p>
+                  <div className="conv-info">
+                    <span className="conv-title">{conv.title}</span>
+                    <span className="conv-time">{conv.timestamp}</span>
                   </div>
                 )}
               </button>
@@ -210,53 +207,51 @@ export function Sidebar({
           </button>
 
           <button
-            className="flex items-center gap-3 p-2 rounded-md hover:bg-white/5"
+            className="flex items-center gap-3 p-2 rounded-md text-slate-400 hover:text-slate-100 hover:bg-white/5 transition-colors"
             title="Starchat"
             onClick={onNewChat}
             suppressHydrationWarning
           >
-            <div className="inline-flex items-center justify-center rounded-sm" style={{ width: 28, height: 28, background: 'linear-gradient(135deg,#f59e0b,#f97316)' }}>
-              <Star size={14} color="#0a0d10" />
-            </div>
+            <Star size={18} />
             {isExpanded && <span>Starchat</span>}
           </button>
 
           <button
-            className="flex items-center gap-3 p-2 rounded-md hover:bg-white/5"
+            className="flex items-center gap-3 p-2 rounded-md text-slate-400 hover:text-slate-100 hover:bg-white/5 transition-colors"
             title="Learn more"
             onClick={() => window.open(process.env.NEXT_PUBLIC_APP_URL || '/', '_blank')}
             suppressHydrationWarning
           >
-            <div className="inline-flex items-center justify-center rounded-sm" style={{ width: 28, height: 28, background: 'linear-gradient(135deg,#06b6d4,#22d3ee)' }}>
-              <ExternalLink size={14} color="#0a0d10" />
-            </div>
+            <ExternalLink size={18} />
             {isExpanded && <span>Learn More</span>}
           </button>
 
-          <div className="flex items-center gap-2">
-            {process.env.NEXT_PUBLIC_LINKEDIN_URL && (
-              <a href={process.env.NEXT_PUBLIC_LINKEDIN_URL} target="_blank" rel="noreferrer" title="LinkedIn" className="inline-flex items-center gap-2 p-1 rounded-md hover:bg-white/5">
-                <div className="inline-flex items-center justify-center rounded-md" style={{ width: 36, height: 36, background: 'linear-gradient(135deg,#0ea5e9,#06b6d4)' }}>
-                  <Linkedin size={16} color="#0a0d10" />
-                </div>
-                {isExpanded && <span className="text-sm">LinkedIn</span>}
-              </a>
-            )}
+          {process.env.NEXT_PUBLIC_LINKEDIN_URL && (
+            <a
+              href={process.env.NEXT_PUBLIC_LINKEDIN_URL}
+              target="_blank"
+              rel="noreferrer"
+              title="LinkedIn"
+              className="flex items-center gap-3 p-2 rounded-md text-slate-400 hover:text-slate-100 hover:bg-white/5 transition-colors"
+            >
+              <Linkedin size={18} />
+              {isExpanded && <span>LinkedIn</span>}
+            </a>
+          )}
 
-            {mounted && session && (
-              <button
-                className="flex items-center gap-2 p-2 rounded-md text-rose-400 hover:bg-white/5"
-                title="Sign Out"
-                onClick={() => signOut({ callbackUrl: '/' })}
-                suppressHydrationWarning
-              >
-                <LogOut size={18} />
-                {isExpanded && <span>Sign Out</span>}
-              </button>
-            )}
-          </div>
+          {mounted && session && (
+            <button
+              className="flex items-center gap-3 p-2 rounded-md text-rose-400 hover:text-rose-300 hover:bg-white/5 transition-colors"
+              title="Sign Out"
+              onClick={() => signOut({ callbackUrl: '/' })}
+              suppressHydrationWarning
+            >
+              <LogOut size={18} />
+              {isExpanded && <span>Sign Out</span>}
+            </button>
+          )}
         </div>
       </div>
-    </aside>
-  );
-}
+        </aside>
+      );
+    }

@@ -127,7 +127,7 @@ export function ChatMessage({ message }: ChatMessageProps) {
                 ul: ({ children }) => <ul style={{ marginBottom: "0.75em", paddingLeft: "1.5em", listStyleType: "disc" }}>{children}</ul>,
                 ol: ({ children }) => <ol style={{ marginBottom: "0.75em", paddingLeft: "1.5em", listStyleType: "decimal" }}>{children}</ol>,
                 li: ({ children }) => <li style={{ marginBottom: "0.25em" }}>{children}</li>,
-                code: ({ className, children, ...props }) => {
+                code: ({ className, children }) => {
                   const match = /language-(\w+)/.exec(className || "");
                   const codeString = String(children).replace(/\n$/, "");
                   const isInline = !className && !codeString.includes("\n");

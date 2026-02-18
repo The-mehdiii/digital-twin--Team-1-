@@ -11,10 +11,19 @@ export interface ChunkOptions {
   minChunkSize?: number; // Minimum chunk size to avoid tiny fragments
 }
 
+function parseEnvInt(name: string, fallback: number) {
+  const v = process.env[name];
+  if (!v) return fallback;
+  const n = parseInt(v, 10);
+  return Number.isNaN(n) ? fallback : n;
+}
+
+// Allow runtime tuning via environment variables:
+// CHUNK_SIZE, CHUNK_OVERLAP, MIN_CHUNK_SIZE
 const DEFAULT_OPTIONS: Required<ChunkOptions> = {
-  chunkSize: 1000, // ~200-250 words
-  chunkOverlap: 200, // ~40-50 words overlap
-  minChunkSize: 100, // Minimum 100 chars per chunk
+  chunkSize: parseEnvInt("CHUNK_SIZE", 1000), // ~200-250 words
+  chunkOverlap: parseEnvInt("CHUNK_OVERLAP", 200), // ~40-50 words overlap
+  minChunkSize: parseEnvInt("MIN_CHUNK_SIZE", 100), // Minimum 100 chars per chunk
 };
 
 /**

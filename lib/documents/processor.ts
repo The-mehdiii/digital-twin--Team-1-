@@ -86,6 +86,7 @@ export async function processDocument(
       data: {
         status: "INDEXED",
         chunkCount: chunks.length,
+        pageCount: parseResult.pageCount ?? undefined,
       },
     });
 
@@ -154,6 +155,7 @@ export async function getUserDocuments(userId: string) {
       title: true,
       description: true,
       status: true,
+      pageCount: true,
       chunkCount: true,
       errorMessage: true,
       createdAt: true,

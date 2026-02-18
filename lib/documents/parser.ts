@@ -1,5 +1,6 @@
 import mammoth from "mammoth";
 import pdfParse from "pdf-parse";
+import JSZip from "jszip";
 
 // pdf-parse v1 has a simple API: pdfParse(buffer) returns { text, numpages }
 async function parsePdfBuffer(buffer: Buffer): Promise<{ text: string; pageCount: number }> {
@@ -10,7 +11,7 @@ async function parsePdfBuffer(buffer: Buffer): Promise<{ text: string; pageCount
   };
 }
 
-export type SupportedFileType = "pdf" | "docx" | "txt" | "md";
+export type SupportedFileType = "pdf" | "docx" | "pptx" | "txt" | "md";
 
 export interface ParseResult {
   text: string;
@@ -28,6 +29,8 @@ export function getFileType(filename: string): SupportedFileType | null {
       return "pdf";
     case "docx":
       return "docx";
+    case "pptx":
+      return "pptx";
     case "txt":
       return "txt";
     case "md":
@@ -60,6 +63,31 @@ export async function parseDocument(
       const docxResult = await mammoth.extractRawText({ buffer });
       text = docxResult.value;
       break;
+
+    case "pptx": {
+      // Extract slide text from PPTX (zip of XML files)
+      const zip = await JSZip.loadAsync(buffer);
+      const slideFiles = Object.keys(zip.files).filter((p) =>
+        p.startsWith("ppt/slides/slide") && p.endsWith(".xml")
+      );
+
+      const slideTexts: string[] = [];
+      for (const slidePath of slideFiles.sort()) {
+        try {
+          const content = await zip.files[slidePath].async("string");
+          // Extract text inside <a:t> ... </a:t> tags (PowerPoint uses a:t)
+          const matches = [...content.matchAll(/<a:t[^>]*>([\s\S]*?)<\/a:t>/gi)];
+          const slideText = matches.map((m) => m[1].replace(/\s+/g, " ").trim()).join(" ");
+          if (slideText.length > 0) slideTexts.push(slideText);
+        } catch (e) {
+          // ignore individual slide parse errors
+        }
+      }
+
+      text = slideTexts.join("\n\n");
+      pageCount = slideTexts.length;
+      break;
+    }
 
     case "txt":
     case "md":
@@ -113,7 +141,7 @@ export function validateFile(
   if (!fileType) {
     return {
       valid: false,
-      error: "Unsupported file type. Please upload PDF, DOCX, TXT, or MD files.",
+      error: "Unsupported file type. Please upload PDF, DOCX, PPTX, TXT, or MD files.",
     };
   }
 

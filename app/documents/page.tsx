@@ -23,6 +23,7 @@ interface Document {
   description: string | null;
   status: "PENDING" | "PROCESSING" | "INDEXED" | "FAILED";
   chunkCount: number;
+  pageCount?: number | null;
   errorMessage: string | null;
   createdAt: string;
 }
@@ -35,6 +36,7 @@ export default function DocumentsPage() {
   const [isUploading, setIsUploading] = useState(false);
   const [uploadError, setUploadError] = useState<string | null>(null);
   const [dragActive, setDragActive] = useState(false);
+  const [previews, setPreviews] = useState<Record<string, string>>({});
   const adminEmail = process.env.NEXT_PUBLIC_ADMIN_EMAIL;
 
   // Redirect if not authenticated
@@ -59,6 +61,7 @@ export default function DocumentsPage() {
       const response = await fetch("/api/documents");
       if (response.ok) {
         const data = await response.json();
+        // API may return pageCount; merge into documents
         setDocuments(data.documents);
       }
     } catch (error) {
@@ -272,7 +275,7 @@ export default function DocumentsPage() {
           </p>
           <input
             type="file"
-            accept=".pdf,.docx,.txt,.md"
+            accept=".pdf,.docx,.pptx,.txt,.md"
             multiple
             onChange={(e) => handleUpload(e.target.files)}
             style={{ display: "none" }}
@@ -309,7 +312,7 @@ export default function DocumentsPage() {
             fontSize: "12px",
             marginTop: "16px"
           }}>
-            Supported: PDF, DOCX, TXT, Markdown (max 10MB)
+            Supported: PDF, DOCX, PPTX, TXT, Markdown (max 10MB)
           </p>
         </div>
 
@@ -400,6 +403,12 @@ export default function DocumentsPage() {
                       <span>{doc.fileType.toUpperCase()}</span>
                       <span>•</span>
                       <span>{formatSize(doc.fileSize)}</span>
+                      {doc.pageCount && (
+                        <>
+                          <span>•</span>
+                          <span>{doc.pageCount} pages</span>
+                        </>
+                      )}
                       {doc.chunkCount > 0 && (
                         <>
                           <span>•</span>
@@ -410,22 +419,71 @@ export default function DocumentsPage() {
                   </div>
 
                   <StatusBadge status={doc.status} />
+                  <div style={{ display: "flex", gap: "8px", alignItems: "center" }}>
+                    <button
+                      onClick={async () => {
+                        if (previews[doc.id]) {
+                          // toggle off
+                          setPreviews((p) => {
+                            const copy = { ...p };
+                            delete copy[doc.id];
+                            return copy;
+                          });
+                          return;
+                        }
 
-                  <button
-                    onClick={() => handleDelete(doc.id)}
-                    style={{
-                      background: "transparent",
-                      border: "none",
-                      color: "#9ca3af",
-                      cursor: "pointer",
-                      padding: "8px",
+                        try {
+                          const res = await fetch(`/api/documents/${doc.id}`);
+                          if (!res.ok) return;
+                          const data = await res.json();
+                          const first = data.document?.chunks?.[0]?.content || "";
+                          const snippet = first.split("\n").join(" ").slice(0, 300);
+                          setPreviews((p) => ({ ...p, [doc.id]: snippet }));
+                        } catch (err) {
+                          console.error("Preview fetch error:", err);
+                        }
+                      }}
+                      style={{
+                        background: "transparent",
+                        border: "1px solid rgba(255,255,255,0.06)",
+                        color: "#9ca3af",
+                        cursor: "pointer",
+                        padding: "8px 10px",
+                        borderRadius: "8px",
+                        fontSize: "13px",
+                      }}
+                    >
+                      {previews[doc.id] ? "Hide Preview" : "Preview"}
+                    </button>
+
+                    <button
+                      onClick={() => handleDelete(doc.id)}
+                      style={{
+                        background: "transparent",
+                        border: "none",
+                        color: "#9ca3af",
+                        cursor: "pointer",
+                        padding: "8px",
+                        borderRadius: "8px",
+                        transition: "all 0.2s",
+                      }}
+                      title="Delete document"
+                    >
+                      <Trash2 size={18} />
+                    </button>
+                  {previews[doc.id] && (
+                    <div style={{
+                      marginTop: "8px",
+                      background: "rgba(0,0,0,0.25)",
                       borderRadius: "8px",
-                      transition: "all 0.2s",
-                    }}
-                    title="Delete document"
-                  >
-                    <Trash2 size={18} />
-                  </button>
+                      padding: "12px",
+                      color: "rgba(255,255,255,0.9)",
+                      fontSize: "13px",
+                    }}>
+                      {previews[doc.id]}
+                    </div>
+                  )}
+                </div>
                 </div>
               ))}
             </div>
