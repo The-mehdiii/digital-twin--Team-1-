@@ -3,6 +3,7 @@ import { parseDocument, getFileType } from "./parser";
 import { chunkText } from "./chunker";
 import { upsertChunks, deleteDocumentVectors } from "@/lib/vector/embedder";
 import { VectorMetadata } from "@/lib/vector/client";
+import type { DocumentChunk } from "@prisma/client";
 
 /**
  * Process a document: parse → chunk → embed → store
@@ -54,7 +55,7 @@ export async function processDocument(
     );
 
     // 5. Prepare vectors with metadata
-    const vectorData = chunkRecords.map((record, index) => ({
+    const vectorData = (chunkRecords as DocumentChunk[]).map((record, index) => ({
       id: record.id,
       content: chunks[index].content,
       metadata: {
