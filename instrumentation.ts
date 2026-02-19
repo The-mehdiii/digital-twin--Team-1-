@@ -40,5 +40,6 @@ export const onRequestError = async (
 ) => {
   if (!process.env.NEXT_PUBLIC_SENTRY_DSN) return;
   const { captureRequestError } = await import("@sentry/nextjs");
-  captureRequestError(err, request, context);
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  captureRequestError(err, request, context as any);
 };
