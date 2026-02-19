@@ -118,7 +118,7 @@ export async function POST(request: NextRequest) {
 
     // Stream response
     const result = streamText({
-      model: groq("llama-3.3-70b-versatile"),
+      model: groq("llama-3.3-70b-versatile") as any,
       system: enhancedSystemPrompt,
       messages: [
         ...chatHistory,

@@ -28,7 +28,7 @@ main { flex: 1; min-height: 100vh; background: linear-gradient(180deg, var(--bg)
 
 /* Header */
 header { padding: 20px 24px; }
-header h1 { margin: 0; font-size: 26px; background: linear-gradient(135deg,var(--primary-start),var(--primary-end)); -webkit-background-clip: text; color: transparent; }
+header h1 { margin: 0; font-size: 26px; background: linear-gradient(135deg,var(--primary-start),var(--primary-end)); -webkit-background-clip: text; background-clip: text; color: transparent; }
 header p { margin: 6px 0 0; color: var(--muted); }
 
 /* Sidebar */
