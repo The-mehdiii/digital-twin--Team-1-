@@ -1,18 +1,23 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getConversation, deleteConversation } from "@/lib/db";
+import { auth } from "@/lib/auth";
 
 /**
  * GET /api/conversations/[id]
- * Get a specific conversation with all messages
+ * Get a specific conversation (only if it belongs to the authenticated user)
  */
 export async function GET(
   _request: NextRequest,
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const { id } = await params;
+    const session = await auth();
+    if (!session?.user?.id) {
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    }
 
-    const conversation = await getConversation(id);
+    const { id } = await params;
+    const conversation = await getConversation(id, session.user.id);
 
     if (!conversation) {
       return NextResponse.json(
@@ -33,16 +38,20 @@ export async function GET(
 
 /**
  * DELETE /api/conversations/[id]
- * Delete a conversation and all its messages
+ * Delete a conversation (only if it belongs to the authenticated user)
  */
 export async function DELETE(
   _request: NextRequest,
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const { id } = await params;
+    const session = await auth();
+    if (!session?.user?.id) {
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    }
 
-    await deleteConversation(id);
+    const { id } = await params;
+    await deleteConversation(id, session.user.id);
 
     return NextResponse.json({ success: true });
   } catch (error) {

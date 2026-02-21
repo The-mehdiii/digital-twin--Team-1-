@@ -1,20 +1,23 @@
 import { prisma } from "./prisma";
 
 /**
- * Create a new conversation
+ * Create a new conversation for a specific user
  */
-export async function createConversation(title: string = "New Chat") {
+export async function createConversation(title: string = "New Chat", userId?: string) {
   return prisma.conversation.create({
-    data: { title },
+    data: { title, userId: userId ?? null },
   });
 }
 
 /**
- * Get conversation with all messages
+ * Get conversation with all messages (scoped to userId if provided)
  */
-export async function getConversation(conversationId: string) {
+export async function getConversation(conversationId: string, userId?: string) {
   return prisma.conversation.findUnique({
-    where: { id: conversationId },
+    where: {
+      id: conversationId,
+      ...(userId ? { userId } : {}),
+    },
     include: {
       messages: {
         orderBy: { createdAt: "asc" },
@@ -24,10 +27,11 @@ export async function getConversation(conversationId: string) {
 }
 
 /**
- * Get all conversations (sorted by newest first)
+ * Get conversations for a specific user only
  */
-export async function getConversations(limit: number = 50) {
+export async function getConversations(userId: string, limit: number = 50) {
   return prisma.conversation.findMany({
+    where: { userId },
     orderBy: { updatedAt: "desc" },
     take: limit,
     include: {
@@ -65,11 +69,14 @@ export async function addMessage(
 }
 
 /**
- * Delete a conversation and all its messages
+ * Delete a conversation (only if it belongs to the user)
  */
-export async function deleteConversation(conversationId: string) {
+export async function deleteConversation(conversationId: string, userId?: string) {
   return prisma.conversation.delete({
-    where: { id: conversationId },
+    where: {
+      id: conversationId,
+      ...(userId ? { userId } : {}),
+    },
   });
 }
 

@@ -48,11 +48,19 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: ERROR_MESSAGES.INVALID_REQUEST }, { status: 400 });
     }
 
-    // Ensure conversation exists in DB
-    const existingConversation = await getConversation(conversationId);
+    // Auth check
+    const session = await auth();
+    const userId = session?.user?.id;
+
+    // Ensure conversation exists in DB, scoped to user
+    const existingConversation = await getConversation(conversationId, userId);
     if (!existingConversation) {
       await prisma.conversation.create({
-        data: { id: conversationId, title: lastUserMessage.content.substring(0, 50) },
+        data: {
+          id: conversationId,
+          title: lastUserMessage.content.substring(0, 50),
+          userId: userId ?? null,
+        },
       });
     }
 
@@ -64,9 +72,7 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: ERROR_MESSAGES.SERVER_ERROR }, { status: 500 });
     }
 
-    // Auth + RAG + Prefs
-    const session = await auth();
-    const userId = session?.user?.id;
+    // RAG + Prefs
 
     let userPrefs: any = null;
     if (userId) {
