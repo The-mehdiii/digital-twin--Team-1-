@@ -138,10 +138,17 @@ export default function ChatPage() {
         onNewChat={handleNewChat}
         onSelectConversation={handleSelectConversation}
       />
-      <main style={{ flex: 1, display: "flex", flexDirection: "column", minWidth: 0, height: "100vh", overflow: "hidden" }}>
-        <header style={{ padding: "20px 24px", borderBottom: "1px solid rgba(255,255,255,0.1)", flexShrink: 0 }}>
-          <h1 style={{ fontSize: "20px", fontWeight: 700, color: "#fff", margin: 0 }}>Mehdi's Digital Twin</h1>
-          <p style={{ fontSize: 14, color: "rgba(255,255,255,0.6)", margin: "4px 0 0 0" }}>Ask me anything about web development, projects, or collaborations</p>
+      <main style={{ flex: 1, display: "flex", flexDirection: "column", minWidth: 0, height: "100vh", overflow: "hidden", background: "linear-gradient(180deg, #0a0d10 0%, #0d1117 100%)" }}>
+        <header style={{ padding: "18px 24px", borderBottom: "1px solid rgba(255,255,255,0.06)", flexShrink: 0, background: "rgba(10,13,16,0.8)", backdropFilter: "blur(20px)" }}>
+          <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
+            <div style={{ width: "36px", height: "36px", borderRadius: "10px", background: "linear-gradient(135deg, #06b6d4, #22d3ee)", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
+              <span style={{ fontSize: "16px" }}>✨</span>
+            </div>
+            <div>
+              <h1 style={{ fontSize: "18px", fontWeight: 700, color: "#ecfeff", margin: 0, letterSpacing: "-0.01em" }}>Mehdi's Digital Twin</h1>
+              <p style={{ fontSize: 13, color: "rgba(165,243,252,0.5)", margin: "2px 0 0 0" }}>AI-powered assistant · Always online</p>
+            </div>
+          </div>
         </header>
 
         {/* Error banner */}
@@ -178,7 +185,7 @@ export default function ChatPage() {
           <ChatMessages messages={messages as any} isLoading={isLoading} />
         </div>
 
-        <div style={{ borderTop: "1px solid rgba(255,255,255,0.1)", padding: "20px 24px", flexShrink: 0, background: "rgba(0,0,0,0.2)" }}>
+        <div style={{ borderTop: "1px solid rgba(255,255,255,0.06)", flexShrink: 0, background: "rgba(10,13,16,0.6)", backdropFilter: "blur(20px)" }}>
           <ChatInput input={input} setInput={setInput} handleSubmit={handleSubmit} isLoading={isLoading} />
         </div>
       </main>

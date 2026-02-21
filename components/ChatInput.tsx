@@ -37,33 +37,33 @@ export function ChatInput({
   };
 
   return (
-    <form onSubmit={handleSubmit} className="flex gap-3 p-4 border-t border-cyan-900/30 bg-gray-900/50">
-      <input
-        ref={inputRef}
-        type="text"
-        placeholder="Ask me about Mehdi's work, skills, or projects..."
-        value={input}
-        onChange={(e) => setInput(e.target.value)}
-        onKeyDown={handleKeyDown}
-        disabled={isLoading}
-        className="flex-1 px-4 py-3 bg-gray-800/50 border border-cyan-800/30 rounded-xl text-cyan-50 placeholder:text-cyan-700 focus:outline-none focus:ring-2 focus:ring-cyan-500/50 focus:border-cyan-500 transition-all disabled:opacity-50"
-        suppressHydrationWarning
-      />
-      <Button
-        type="submit"
-        disabled={isLoading || !input.trim()}
-        variant="cyan"
-        size="lg"
-        className="px-6"
-      >
-        {isLoading ? (
-          <span className="flex items-center gap-2">
+    <form onSubmit={handleSubmit} className="flex gap-3 p-4 max-w-4xl mx-auto w-full">
+      <div className="flex-1 flex items-center gap-3 px-4 py-2 bg-white/[0.04] border border-white/[0.08] rounded-2xl transition-all focus-within:border-cyan-500/40 focus-within:bg-white/[0.06] focus-within:shadow-[0_0_20px_rgba(6,182,212,0.1)]">
+        <input
+          ref={inputRef}
+          type="text"
+          placeholder="Ask me about Mehdi's work, skills, or projects..."
+          value={input}
+          onChange={(e) => setInput(e.target.value)}
+          onKeyDown={handleKeyDown}
+          disabled={isLoading}
+          className="flex-1 py-2.5 bg-transparent border-none text-cyan-50 placeholder:text-white/25 focus:outline-none disabled:opacity-50 text-[15px]"
+          suppressHydrationWarning
+        />
+        <Button
+          type="submit"
+          disabled={isLoading || !input.trim()}
+          variant="cyan"
+          size="icon"
+          className="rounded-xl h-10 w-10 shrink-0 transition-all duration-200"
+        >
+          {isLoading ? (
             <span className="w-4 h-4 border-2 border-gray-900/30 border-t-gray-900 rounded-full animate-spin" />
-          </span>
-        ) : (
-          <Send className="w-5 h-5" />
-        )}
-      </Button>
+          ) : (
+            <Send className="w-4.5 h-4.5" />
+          )}
+        </Button>
+      </div>
     </form>
   );
 }
