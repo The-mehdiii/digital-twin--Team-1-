@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useEffect, useState } from "react";
-import { MessageCircle, ArrowRight, Sparkles, Zap, Shield, Smartphone, Database, Target, ChevronDown } from "lucide-react";
+import { MessageCircle, ArrowRight, Sparkles, Zap, Shield, Smartphone, Database, Target, ChevronDown, Brain, Code2, Layers, Globe } from "lucide-react";
 import styles from "./marquee.module.css";
 
 const techItems = [
@@ -64,8 +64,8 @@ export default function Home() {
             <span className="nav-title">Digital Twin</span>
           </div>
           <div className="nav-links">
+            <a href="#about" className="nav-link">About</a>
             <a href="#features" className="nav-link">Features</a>
-            <a href="#stats" className="nav-link">Stats</a>
             <Link href="/chat" className="nav-cta">
               <MessageCircle size={16} />
               Start Chat
@@ -143,6 +143,103 @@ export default function Home() {
                 <div className="typing-dot" />
                 <div className="typing-dot" />
                 <div className="typing-dot" />
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* About Section */}
+      <section id="about" className="about-section">
+        <div className="about-glow" />
+        <div className="section-header">
+          <span className="section-badge">About Mehdi</span>
+          <h2 className="section-title">AI Engineer & Full-Stack Developer</h2>
+          <p className="section-subtitle">
+            Crafting exceptional digital experiences with modern technologies and intelligent AI solutions.
+          </p>
+        </div>
+
+        <div className="about-grid">
+          {/* Main intro card */}
+          <div className="about-card about-card-main">
+            <div className="about-avatar">
+              <span className="about-avatar-text">MM</span>
+              <span className="about-status" />
+            </div>
+            <div className="about-info">
+              <h3 className="about-name">Mohammed Mehdi Musa</h3>
+              <div className="about-roles">
+                <span className="about-role">
+                  <Brain size={14} />
+                  AI Engineer
+                </span>
+                <span className="about-role">
+                  <Code2 size={14} />
+                  Full-Stack Developer
+                </span>
+              </div>
+              <p className="about-bio">
+                I'm a passionate developer specializing in building intelligent, high-performance web applications.
+                With expertise in AI integrations, modern frameworks, and scalable architectures, I create solutions
+                that push boundaries and deliver real impact. From crafting AI-powered chatbots to building full-stack
+                platforms — I turn ideas into production-ready products.
+              </p>
+              <div className="about-highlights">
+                <div className="about-highlight">
+                  <span className="highlight-number">2+</span>
+                  <span className="highlight-label">Years Experience</span>
+                </div>
+                <div className="about-highlight">
+                  <span className="highlight-number">15+</span>
+                  <span className="highlight-label">Projects Built</span>
+                </div>
+                <div className="about-highlight">
+                  <span className="highlight-number">10+</span>
+                  <span className="highlight-label">Happy Clients</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Speciality cards */}
+          <div className="about-specialties">
+            <div className="specialty-card">
+              <div className="specialty-icon">
+                <Brain size={22} />
+              </div>
+              <h4 className="specialty-title">AI & Machine Learning</h4>
+              <p className="specialty-desc">
+                Building intelligent systems with OpenAI, Groq, LangChain, and custom AI agents. RAG pipelines, embeddings, and conversational AI.
+              </p>
+              <div className="specialty-tags">
+                <span>OpenAI</span><span>Groq</span><span>RAG</span><span>Embeddings</span>
+              </div>
+            </div>
+
+            <div className="specialty-card">
+              <div className="specialty-icon">
+                <Layers size={22} />
+              </div>
+              <h4 className="specialty-title">Full-Stack Development</h4>
+              <p className="specialty-desc">
+                End-to-end web applications with Next.js, React, and Node.js. Database design, API architecture, and cloud deployment.
+              </p>
+              <div className="specialty-tags">
+                <span>Next.js</span><span>React</span><span>Node.js</span><span>TypeScript</span>
+              </div>
+            </div>
+
+            <div className="specialty-card">
+              <div className="specialty-icon">
+                <Globe size={22} />
+              </div>
+              <h4 className="specialty-title">Modern Web Technologies</h4>
+              <p className="specialty-desc">
+                Pixel-perfect UIs with Tailwind CSS, responsive design, and performance optimization. Vercel, Docker, and CI/CD.
+              </p>
+              <div className="specialty-tags">
+                <span>Tailwind</span><span>PostgreSQL</span><span>Prisma</span><span>Vercel</span>
               </div>
             </div>
           </div>

@@ -68,6 +68,7 @@ export default function ChatPage() {
     error: chatError,
     setMessages,
     reload,
+    append,
   } = useChat({
     api: "/api/chat",
     body: { conversationId: activeConversationId, system: SYSTEM_PROMPT },
@@ -110,6 +111,22 @@ export default function ChatPage() {
     setActiveConversationId(undefined);
     setRagSources([]);
   }, [setMessages, setInput]);
+
+  // Handle suggestion button clicks from empty state
+  const handleSendSuggestion = useCallback((text: string) => {
+    // Create a new conversation
+    const newConvId = Date.now().toString();
+    setActiveConversationId(newConvId);
+    const newConv: Conversation = {
+      id: newConvId,
+      title: text.substring(0, 40),
+      timestamp: new Date().toLocaleDateString(),
+    };
+    setConversations((prev) => [newConv, ...prev]);
+
+    // Use append to programmatically send the message
+    append({ role: "user", content: text });
+  }, [append, setConversations]);
 
   // Load messages when switching to an existing conversation
   const handleSelectConversation = useCallback(async (id: string) => {
@@ -181,8 +198,8 @@ export default function ChatPage() {
           </div>
         )}
 
-        <div style={{ flex: 1, overflow: "auto" }}>
-          <ChatMessages messages={messages as any} isLoading={isLoading} />
+        <div style={{ flex: 1, overflow: "auto", display: "flex", flexDirection: "column" }}>
+          <ChatMessages messages={messages as any} isLoading={isLoading} onSendSuggestion={handleSendSuggestion} />
         </div>
 
         <div style={{ borderTop: "1px solid rgba(255,255,255,0.06)", flexShrink: 0, background: "rgba(10,13,16,0.6)", backdropFilter: "blur(20px)" }}>
