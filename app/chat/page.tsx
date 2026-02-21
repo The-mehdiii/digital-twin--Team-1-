@@ -202,7 +202,7 @@ export default function ChatPage() {
           <ChatMessages messages={messages as any} isLoading={isLoading} onSendSuggestion={handleSendSuggestion} />
         </div>
 
-        <div style={{ borderTop: "1px solid rgba(255,255,255,0.06)", flexShrink: 0, background: "rgba(10,13,16,0.6)", backdropFilter: "blur(20px)" }}>
+        <div style={{ borderTop: "1px solid rgba(255,255,255,0.08)", flexShrink: 0, background: "rgba(10,13,16,0.7)", backdropFilter: "blur(24px)", padding: "12px 0 max(12px, env(safe-area-inset-bottom))" }}>
           <ChatInput input={input} setInput={setInput} handleSubmit={handleSubmit} isLoading={isLoading} />
         </div>
       </main>

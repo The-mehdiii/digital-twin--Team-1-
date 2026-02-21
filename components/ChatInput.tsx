@@ -37,8 +37,8 @@ export function ChatInput({
   };
 
   return (
-    <form onSubmit={handleSubmit} className="flex gap-3 p-4 max-w-4xl mx-auto w-full">
-      <div className="flex-1 flex items-center gap-3 px-4 py-2 bg-white/[0.04] border border-white/[0.08] rounded-2xl transition-all focus-within:border-cyan-500/40 focus-within:bg-white/[0.06] focus-within:shadow-[0_0_20px_rgba(6,182,212,0.1)]">
+    <form onSubmit={handleSubmit} className="flex gap-3 px-6 py-3 max-w-[56rem] mx-auto w-full">
+      <div className="flex-1 flex items-center gap-3 px-5 py-1.5 bg-white/[0.05] border border-white/[0.1] rounded-2xl transition-all focus-within:border-cyan-500/50 focus-within:bg-white/[0.07] focus-within:shadow-[0_0_24px_rgba(6,182,212,0.12)]">
         <input
           ref={inputRef}
           type="text"
@@ -47,7 +47,7 @@ export function ChatInput({
           onChange={(e) => setInput(e.target.value)}
           onKeyDown={handleKeyDown}
           disabled={isLoading}
-          className="flex-1 py-2.5 bg-transparent border-none text-cyan-50 placeholder:text-white/25 focus:outline-none disabled:opacity-50 text-[15px]"
+          className="flex-1 py-3 bg-transparent border-none text-cyan-50 placeholder:text-white/30 focus:outline-none disabled:opacity-50 text-[15px]"
           suppressHydrationWarning
         />
         <Button
@@ -55,7 +55,7 @@ export function ChatInput({
           disabled={isLoading || !input.trim()}
           variant="cyan"
           size="icon"
-          className="rounded-xl h-10 w-10 shrink-0 transition-all duration-200"
+          className="rounded-xl h-10 w-10 shrink-0 transition-all duration-200 shadow-lg shadow-cyan-500/20"
         >
           {isLoading ? (
             <span className="w-4 h-4 border-2 border-gray-900/30 border-t-gray-900 rounded-full animate-spin" />
