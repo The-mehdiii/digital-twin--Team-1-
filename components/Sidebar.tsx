@@ -17,6 +17,8 @@ interface SidebarProps {
   activeConversationId?: string;
   onNewChat: () => void;
   onSelectConversation: (id: string) => void;
+  isMobileOpen?: boolean;
+  onMobileClose?: () => void;
 }
 
 export function Sidebar({
@@ -24,6 +26,8 @@ export function Sidebar({
   activeConversationId,
   onNewChat,
   onSelectConversation,
+  isMobileOpen = false,
+  onMobileClose,
 }: SidebarProps) {
   const { updatePreferences } = usePreferences();
   const [isExpanded, setIsExpanded] = useState(true);
@@ -48,10 +52,21 @@ export function Sidebar({
   }, [isExpanded, session?.user, updatePreferences]);
 
   return (
+    <>
+      {/* Mobile overlay backdrop */}
+      {isMobileOpen && (
+        <div
+          className="fixed inset-0 bg-black/60 z-40 md:hidden"
+          onClick={onMobileClose}
+        />
+      )}
     <aside
-      className={`flex flex-col h-full bg-[#061014] text-slate-100 transition-width duration-200 ease-in-out overflow-hidden ${
-        isExpanded ? 'w-72' : 'w-20'
-      }`}
+      className={`flex flex-col h-full bg-[#061014] text-slate-100 overflow-hidden
+        md:relative md:translate-x-0 md:transition-[width] md:duration-200
+        fixed inset-y-0 left-0 z-50 transition-transform duration-300 ease-in-out
+        ${isMobileOpen ? 'translate-x-0' : '-translate-x-full md:translate-x-0'}
+        ${isExpanded ? 'w-72' : 'w-72 md:w-20'}
+      `}
       aria-label="Main sidebar"
     >
       {/* Header */}
@@ -226,18 +241,16 @@ export function Sidebar({
             {isExpanded && <span>Learn More</span>}
           </button>
 
-          {process.env.NEXT_PUBLIC_LINKEDIN_URL && (
-            <a
-              href={process.env.NEXT_PUBLIC_LINKEDIN_URL}
-              target="_blank"
-              rel="noreferrer"
-              title="LinkedIn"
-              className="flex items-center gap-3 p-2 rounded-md text-slate-400 hover:text-slate-100 hover:bg-white/5 transition-colors"
-            >
-              <Linkedin size={18} />
-              {isExpanded && <span>LinkedIn</span>}
-            </a>
-          )}
+          <a
+            href={process.env.NEXT_PUBLIC_LINKEDIN_URL || "https://www.linkedin.com/in/mohammed-mehdi-musa-71704422a/"}
+            target="_blank"
+            rel="noreferrer"
+            title="LinkedIn"
+            className="flex items-center gap-3 p-2 rounded-md text-[#0a66c2] hover:text-blue-300 hover:bg-white/5 transition-colors"
+          >
+            <Linkedin size={18} />
+            {isExpanded && <span>LinkedIn</span>}
+          </a>
 
           {mounted && session && (
             <button
@@ -253,5 +266,6 @@ export function Sidebar({
         </div>
       </div>
         </aside>
-      );
-    }
+    </>
+  );
+}
