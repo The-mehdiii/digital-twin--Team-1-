@@ -242,7 +242,7 @@ export function Sidebar({
           </button>
 
           <a
-            href={process.env.NEXT_PUBLIC_LINKEDIN_URL || "https://www.linkedin.com/in/mohammed-mehdi-musa-71704422a/"}
+            href="https://www.linkedin.com/in/mohammed-mehdi-musa-71704422a/"
             target="_blank"
             rel="noreferrer"
             title="LinkedIn"
