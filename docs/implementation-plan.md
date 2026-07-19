@@ -153,10 +153,10 @@ Foundation ──▶ Infrastructure ──▶ AI Integration ──▶ RAG ─�
 |------|-------|--------|-------------|
 | Repository Setup | Mehdi | ✅ | Clean folder structure |
 | PRD Creation | All Team | ✅ | docs/prd.md (v1.0) |
-| Technical Design | Mehdi, Mukesh | ✅ | docs/technical-design.md (v1.1) |
+| Technical Design | Mehdi | ✅ | docs/technical-design.md (v1.1) |
 | Design Finalization | All Team | ✅ | docs/design.md (Final) |
 | Skills Documentation | All Team | ✅ | .github/skills/ folder |
-| Git Workflow Setup | Jake | ✅ | Branch protection, PR templates |
+| Git Workflow Setup | Mehdi | ✅ | Branch protection, PR templates |
 | Team Onboarding | Mehdi | ✅ | All members can contribute |
 
 ### Phase 1 Retrospective
@@ -829,22 +829,22 @@ Phase 1 (Complete) ──▶ Phase 2 (Infrastructure) ──▶ Phase 3 (AI) ─
 | Phase 5 | Phase 4 complete (partial) | RAG working, can parallelize UI |
 | Phase 6 | Phase 5 complete | All features implemented |
 
-### 10.3 Parallel Work Opportunities
+### 10.3 Work Sequencing (Solo)
 
 **Week 3-4 (Phase 2):**
-- Frontend (Amith) & Backend (Mukesh) can work in parallel
-- Auth (Omayara) can start after DB schema defined
+- Build frontend and backend in sequence (or overlap where possible)
+- Start auth after the DB schema is defined
 
 **Week 5-6 (Phase 3):**
-- AI Integration (Saurav) & Chat UI (Amith) can develop simultaneously
-- Conversation persistence (Mukesh) after DB ready
+- Develop AI integration and chat UI together
+- Add conversation persistence once the DB is ready
 
 **Week 7-8 (Phase 4):**
-- Document processing (Mukesh) & Vector setup (Saurav) in parallel
-- Upload UI (Omayara) can start early with mocked API
+- Document processing and vector setup can overlap
+- Upload UI can start early with a mocked API
 
 **Week 9-10 (Phase 5):**
-- Settings UI (Omayara, Amith) & Backend config (Mukesh, Saurav) parallel
+- Settings UI and backend config can be built in parallel slices
 
 ---
 

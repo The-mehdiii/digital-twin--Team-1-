@@ -5,7 +5,7 @@
 **Version:** 1.1  
 **Date:** January 29, 2026  
 **Status:** Final - Ready for Implementation  
-**Authors:** Team 1 (Mohammed Mehdi Musa, Mukesh Sapkota, Saurav Ghimire, Amith Hassan, Omayara Afrin, Jake Ryan Lenon, Yamuna Reddy Mandadi)  
+**Author:** Mohammed Mehdi Musa  
 **Related Documents:** [Product Requirements Document](./prd.md)
 
 ---
@@ -56,7 +56,7 @@ This document outlines the technical architecture, design decisions, and impleme
 | **Functional AI Chatbot** | Build a conversational agent that provides intelligent, context-aware responses | P0 (MUST HAVE) |
 | **RAG Integration** | Enable the AI to retrieve and utilize user-provided documents for enhanced answers | P1 (SHOULD HAVE) |
 | **Production-Grade Setup** | Demonstrate best practices for AI project architecture and deployment | P0 (MUST HAVE) |
-| **Team Collaboration** | Enable all 7 team members to contribute effectively | P0 (Week 1 Success) |
+| **Solo Ownership** | Maintain a clear, documented codebase owned by a single developer | P0 (Week 1 Success) |
 | **Extensibility** | Design for future features including multi-modal inputs and advanced agents | P2 (NICE TO HAVE) |
 
 ---
@@ -491,8 +491,8 @@ export function DocumentUpload() {
 
 | Version | Date | Author | Changes |
 |---------|------|--------|---------|
-| 1.0 | 2026-01-27 | Team 1 | Initial technical design document |
-| 1.1 | 2026-01-29 | Team 1 | Updated to align with PRD v1.0, added cross-references, synced priorities, finalized for implementation |
+| 1.0 | 2026-01-27 | Mohammed Mehdi Musa | Initial technical design document |
+| 1.1 | 2026-01-29 | Mohammed Mehdi Musa | Updated to align with PRD v1.0, added cross-references, synced priorities, finalized for implementation |
 
 ---
 

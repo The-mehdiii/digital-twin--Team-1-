@@ -1,4 +1,4 @@
-# Digital Twin Project - [Team Name]
+# Digital Twin
 
 AI-powered Digital Twin Chatbot
 
@@ -11,15 +11,8 @@ AI-powered Digital Twin Chatbot
 - `.gitignore` - Files to ignore
 - `project-management/` - ClickUp screenshots
 
-## Team Members
+## Author
 - Mohammed Mehdi Musa
-- Mukesh Sapkota
-- Saurav Ghimire
-- Amith Hassan
-- Omayara Afrin
-- Jake Ryan Lenon
-- Yamuna Reddy Mandadi
 
 ## Week 1 Status
 - Repository initialized ✅
-
