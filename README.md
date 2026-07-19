@@ -1,6 +1,10 @@
 # Digital Twin
 
-AI-powered Digital Twin Chatbot
+AI-powered Digital Twin Chatbot by Mohammed Mehdi Musa.
+
+## Links
+- **Live demo:** https://mehdi-digital-twin.vercel.app/
+- **GitHub:** https://github.com/The-mehdiii/Digital-Twin-Mehdi
 
 ## Directory Structure
 - `agents.md` - AI instruction manual for Copilot/Claude
