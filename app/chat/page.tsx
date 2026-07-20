@@ -8,7 +8,7 @@ import { Sidebar } from "@/components/Sidebar";
 import { ChatMessages } from "@/components/ChatMessages";
 import { ChatInput } from "@/components/ChatInput";
 import { SYSTEM_PROMPT } from "@/lib/system-prompt";
-import { AlertCircle, X } from "lucide-react";
+import { AlertCircle, X, Menu, Plus } from "lucide-react";
 
 interface Conversation {
   id: string;
@@ -32,6 +32,7 @@ export default function ChatPage() {
 
   const [conversations, setConversations] = useState<Conversation[]>([]);
   const [activeConversationId, setActiveConversationId] = useState<string | undefined>(undefined);
+  const [isMobileSidebarOpen, setIsMobileSidebarOpen] = useState(false);
   // RAG sources returned from the API via X-RAG-Sources header
   const [ragSources, setRagSources] = useState<{ filename: string; score: number }[]>([]);
 
@@ -112,6 +113,26 @@ export default function ChatPage() {
     setRagSources([]);
   }, [setMessages, setInput]);
 
+  // Delete a conversation: optimistic UI update, then persist to DB
+  const handleDeleteConversation = useCallback(async (id: string) => {
+    setConversations((prev) => prev.filter((c) => c.id !== id));
+
+    // If the deleted chat was open, reset to a fresh state
+    if (activeConversationId === id) {
+      setMessages([]);
+      setInput("");
+      setActiveConversationId(undefined);
+      setRagSources([]);
+    }
+
+    try {
+      await fetch(`/api/conversations/${id}`, { method: "DELETE" });
+    } catch (err) {
+      // Conversation may not have been persisted yet; safe to ignore
+      console.error("Failed to delete conversation:", err);
+    }
+  }, [activeConversationId, setMessages, setInput]);
+
   // Handle suggestion button clicks from empty state
   const handleSendSuggestion = useCallback((text: string) => {
     // Create a new conversation
@@ -152,12 +173,23 @@ export default function ChatPage() {
       <Sidebar
         conversations={conversations}
         activeConversationId={activeConversationId}
-        onNewChat={handleNewChat}
-        onSelectConversation={handleSelectConversation}
+        onNewChat={() => { handleNewChat(); setIsMobileSidebarOpen(false); }}
+        onSelectConversation={(id) => { handleSelectConversation(id); setIsMobileSidebarOpen(false); }}
+        onDeleteConversation={handleDeleteConversation}
+        isMobileOpen={isMobileSidebarOpen}
+        onMobileClose={() => setIsMobileSidebarOpen(false)}
       />
       <main style={{ flex: 1, display: "flex", flexDirection: "column", minWidth: 0, height: "100vh", overflow: "hidden", background: "linear-gradient(180deg, #0a0d10 0%, #0d1117 100%)" }}>
-        <header style={{ padding: "18px 24px", borderBottom: "1px solid rgba(255,255,255,0.06)", flexShrink: 0, background: "rgba(10,13,16,0.8)", backdropFilter: "blur(20px)" }}>
+        <header style={{ padding: "14px 20px", borderBottom: "1px solid rgba(255,255,255,0.06)", flexShrink: 0, background: "rgba(10,13,16,0.8)", backdropFilter: "blur(20px)" }}>
           <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
+            {/* Hamburger for mobile */}
+            <button
+              onClick={() => setIsMobileSidebarOpen(true)}
+              style={{ display: "flex", alignItems: "center", justifyContent: "center", background: "transparent", border: "none", color: "#67e8f9", cursor: "pointer", padding: "6px", borderRadius: "8px", marginRight: "2px" }}
+              className="md:hidden"
+            >
+              <Menu size={22} />
+            </button>
             <div style={{ width: "36px", height: "36px", borderRadius: "10px", background: "linear-gradient(135deg, #06b6d4, #22d3ee)", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
               <span style={{ fontSize: "16px" }}>✨</span>
             </div>
@@ -165,6 +197,17 @@ export default function ChatPage() {
               <h1 style={{ fontSize: "18px", fontWeight: 700, color: "#ecfeff", margin: 0, letterSpacing: "-0.01em" }}>Mehdi's Digital Twin</h1>
               <p style={{ fontSize: 13, color: "rgba(165,243,252,0.5)", margin: "2px 0 0 0" }}>AI-powered assistant · Always online</p>
             </div>
+
+            {/* Quick New Chat — always available */}
+            <button
+              onClick={handleNewChat}
+              title="New chat"
+              aria-label="Start a new chat"
+              style={{ marginLeft: "auto", display: "inline-flex", alignItems: "center", gap: 8, background: "rgba(6,182,212,0.1)", border: "1px solid rgba(6,182,212,0.25)", color: "#67e8f9", cursor: "pointer", padding: "8px 14px", borderRadius: 10, fontSize: 13, fontWeight: 600 }}
+            >
+              <Plus size={16} strokeWidth={2.5} />
+              <span className="hidden sm:inline">New Chat</span>
+            </button>
           </div>
         </header>
 

@@ -3,7 +3,7 @@
 import { useState, useEffect, useCallback } from "react";
 import { useSession, signOut } from "next-auth/react";
 import { useRouter } from "next/navigation";
-import { Plus, MessageSquare, Settings, LogOut, ChevronLeft, ChevronRight, Sparkles, Star, ExternalLink, Linkedin } from "lucide-react";
+import { Plus, MessageSquare, Settings, LogOut, ChevronLeft, ChevronRight, Sparkles, Star, ExternalLink, Linkedin, Trash2, Check, X } from "lucide-react";
 import { usePreferences } from "@/lib/hooks/usePreferences";
 
 interface Conversation {
@@ -17,6 +17,7 @@ interface SidebarProps {
   activeConversationId?: string;
   onNewChat: () => void;
   onSelectConversation: (id: string) => void;
+  onDeleteConversation?: (id: string) => void;
   isMobileOpen?: boolean;
   onMobileClose?: () => void;
 }
@@ -26,12 +27,14 @@ export function Sidebar({
   activeConversationId,
   onNewChat,
   onSelectConversation,
+  onDeleteConversation,
   isMobileOpen = false,
   onMobileClose,
 }: SidebarProps) {
   const { updatePreferences } = usePreferences();
   const [isExpanded, setIsExpanded] = useState(true);
   const [mounted, setMounted] = useState(false);
+  const [confirmDeleteId, setConfirmDeleteId] = useState<string | null>(null);
   const { data: session } = useSession();
   const router = useRouter();
 
@@ -107,17 +110,25 @@ export function Sidebar({
       <div className="px-4">
         <button
           onClick={onNewChat}
-          className="w-full flex items-center gap-3 bg-gradient-to-r from-slate-800/30 to-transparent p-2 rounded-lg hover:bg-slate-800/40"
+          className="new-chat-btn"
+          title="Start a new chat"
           suppressHydrationWarning
         >
-          <Plus size={18} />
-          {isExpanded && <span className="font-medium">New Chat</span>}
+          <Plus size={18} strokeWidth={2.5} />
+          {isExpanded && <span className="font-semibold">New Chat</span>}
         </button>
       </div>
 
       {/* Conversations */}
       <div className="flex-1 overflow-y-auto overflow-x-hidden px-2 mt-3">
-        {isExpanded && <h3 className="px-2 pb-1 text-xs text-slate-500 uppercase tracking-wider">Recent Conversations</h3>}
+        {isExpanded && (
+          <h3 className="px-2 pb-1 text-xs text-slate-500 uppercase tracking-wider flex items-center justify-between">
+            <span>Recent Chats</span>
+            {conversations.length > 0 && (
+              <span className="conv-count">{conversations.length}</span>
+            )}
+          </h3>
+        )}
         <div className="flex flex-col gap-0.5 mt-1">
           {conversations.length === 0 ? (
             isExpanded && (
@@ -125,21 +136,60 @@ export function Sidebar({
             )
           ) : (
             conversations.map((conv) => (
-              <button
+              <div
                 key={conv.id}
                 className={`conversation-item ${activeConversationId === conv.id ? "active" : ""}`}
-                onClick={() => onSelectConversation(conv.id)}
-                title={conv.title}
-                suppressHydrationWarning
               >
-                <MessageSquare size={15} style={{ flexShrink: 0, opacity: 0.5 }} />
-                {isExpanded && (
-                  <div className="conv-info">
-                    <span className="conv-title">{conv.title}</span>
-                    <span className="conv-time">{conv.timestamp}</span>
-                  </div>
+                <button
+                  className="conv-main"
+                  onClick={() => { setConfirmDeleteId(null); onSelectConversation(conv.id); }}
+                  title={conv.title}
+                  suppressHydrationWarning
+                >
+                  <MessageSquare size={15} style={{ flexShrink: 0, opacity: 0.5 }} />
+                  {isExpanded && (
+                    <div className="conv-info">
+                      <span className="conv-title">{conv.title}</span>
+                      <span className="conv-time">{conv.timestamp}</span>
+                    </div>
+                  )}
+                </button>
+
+                {isExpanded && onDeleteConversation && (
+                  confirmDeleteId === conv.id ? (
+                    <div className="conv-confirm" role="group" aria-label="Confirm delete">
+                      <button
+                        className="conv-confirm-yes"
+                        title="Delete conversation"
+                        aria-label="Confirm delete"
+                        onClick={() => { onDeleteConversation(conv.id); setConfirmDeleteId(null); }}
+                        suppressHydrationWarning
+                      >
+                        <Check size={15} />
+                      </button>
+                      <button
+                        className="conv-confirm-no"
+                        title="Cancel"
+                        aria-label="Cancel delete"
+                        onClick={() => setConfirmDeleteId(null)}
+                        suppressHydrationWarning
+                      >
+                        <X size={15} />
+                      </button>
+                    </div>
+                  ) : (
+                    <button
+                      className="conv-delete"
+                      title="Delete conversation"
+                      aria-label={`Delete ${conv.title}`}
+                      onClick={() => setConfirmDeleteId(conv.id)}
+                      suppressHydrationWarning
+                    >
+                      <Trash2 size={15} />
+                    </button>
+                  )
                 )}
-              </button>
+              </div>
             ))
           )}
         </div>
