@@ -176,3 +176,35 @@ enum ResponseStyle {
   BALANCED
   DETAILED
 }
+
+// ============================================
+// AGENT TOOL MODELS
+// ============================================
+
+// Lead captured by the Digital Twin when a visitor shows interest
+model Lead {
+  id        String   @id @default(cuid())
+  name      String
+  email     String
+  company   String?
+  message   String?  @db.Text
+  source    String   @default("chat") // where the lead came from
+  createdAt DateTime @default(now())
+
+  @@index([email])
+  @@index([createdAt])
+}
+
+// Meeting request captured by the Digital Twin's bookMeeting tool
+model MeetingRequest {
+  id            String   @id @default(cuid())
+  name          String
+  email         String
+  preferredDate String? // free-text date/time preference from the visitor
+  topic         String?  @db.Text
+  status        String   @default("requested") // requested | scheduled | declined
+  createdAt     DateTime @default(now())
+
+  @@index([email])
+  @@index([createdAt])
+}

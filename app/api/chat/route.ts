@@ -13,6 +13,7 @@ import { SYSTEM_PROMPT } from "@/lib/system-prompt";
 import { checkRateLimit, getRateLimitHeaders, RATE_LIMITS } from "@/lib/rate-limiter";
 import { auth } from "@/lib/auth";
 import { searchDocuments, formatContextForAI } from "@/lib/vector/search";
+import { buildTools } from "@/lib/ai/tools";
 
 export const runtime = "nodejs";
 
@@ -122,7 +123,7 @@ export async function POST(request: NextRequest) {
     // Initialize Groq provider via AI SDK
     const groq = createGroq({ apiKey: groqApiKey });
 
-    // Stream response
+    // Stream response — with agent tools + multi-step tool calling
     const result = streamText({
       model: groq("llama-3.3-70b-versatile") as any,
       system: enhancedSystemPrompt,
@@ -132,6 +133,8 @@ export async function POST(request: NextRequest) {
       ],
       temperature: 0.7,
       maxTokens: 1024,
+      tools: buildTools(userId),
+      maxSteps: 4,
       onFinish: async ({ text }) => {
         // Persist the full assistant reply once streaming is complete
         try {
